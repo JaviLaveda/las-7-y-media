@@ -7,8 +7,21 @@
     <title>Vite + TS</title>
   </head>
   <body>
-    <div id="app">
-      <h1>TypeScript Sandbox</h1>
+    <div id="scoreContainer">
+      <h1 id="scoreText">Your Score</h1>
+      <h2 id="score"></h2>
+    </div>
+
+    <div id="btnContainer">
+      <button id="askCard">Carta</button>
+    </div>
+
+    <div id="cardContainer">
+      <img
+        src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
+        alt=""
+        id="newCard"
+      />
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

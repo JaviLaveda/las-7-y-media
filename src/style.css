@@ -18,3 +18,7 @@
   font-style: bold;
   padding-left: 50px;
 }
+
+#btnNewGame {
+  display: none;
+}

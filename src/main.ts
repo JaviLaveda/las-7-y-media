@@ -1,66 +1,45 @@
 import "./style.css";
 
-// INITIAL SCORE
+// INITIAL SCORE + RULES
 
-var initialScore = 0;
+let userScore: number = 0;
+
+const maxScore: number = 7.5;
+
+/* const maxScore = 7.5;
+ */
 
 // SHOW SCORE FUNCTION
 
-function showScore() {
+const showScore = () => {
   const scoreElement = document.getElementById("score");
-  if (scoreElement !== null && scoreElement !== undefined) {
-    scoreElement.innerHTML = initialScore.toString().padStart(2, "0");
+  if (scoreElement && scoreElement instanceof HTMLHeadingElement) {
+    scoreElement.textContent = userScore.toString().padStart(2, "0");
   }
-}
+};
 
-// MAIN CALL
+document.addEventListener("DOMContentLoaded", showScore);
 
-showScore();
-
-// ASK FOR ANOTHER CARD - RANDOM FUNCTION
-
-function askCard() {
+// GENERATE RANDOM CARD/VALUE
+const generateRandomCard = () => {
   const randomValue = Math.floor(Math.random() * 10 + 1);
   if (randomValue <= 7) {
-    const cardValue = randomValue;
-    console.log(cardValue);
-    showCard(cardValue);
-    addScore(cardValue);
+    const cardNumber: number = randomValue;
+    showCard(cardNumber);
+    addingScore(cardNumber);
+    console.log(cardNumber);
+  } else {
+    const cardNumber: number = randomValue + 2;
+    showCard(cardNumber);
+    addingScore(cardNumber);
+    console.log(cardNumber);
   }
-  if (randomValue > 7) {
-    const cardValue = randomValue + 2;
-    console.log(cardValue);
-    showCard(cardValue);
-    addScore(cardValue);
-  }
-}
+};
 
-// ASK FOR ANOTHER CARD - BTN FUNCTION
-
-const BtnAskCard = document.getElementById("askCard");
-if (
-  BtnAskCard !== null &&
-  BtnAskCard !== undefined &&
-  BtnAskCard instanceof HTMLButtonElement
-) {
-  BtnAskCard.addEventListener("click", askCard);
-}
-
-// SHOW ANOTHER CARD
-
-// function showCard(cardValue: number) {
-//   const imgElement = document.getElementById("newCard");
-//   if (cardValue === 1 && imgElement !== null && imgElement !== undefined) {
-//     imgElement.setAttribute(
-//       "src",
-//       "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg"
-//     );
-//   }
-// }
-
+// SHOW RANDOM CARD
 function showCard(cardValue: number) {
   const imgElement = document.getElementById("newCard");
-  if (imgElement !== null && imgElement !== undefined) {
+  if (imgElement) {
     switch (cardValue) {
       case 1:
         imgElement.setAttribute(
@@ -126,20 +105,85 @@ function showCard(cardValue: number) {
   }
 }
 
-function addScore(cardValue: number) {
-  const userScore = (document.getElementById("score") as HTMLDivElement)
-    .innerText;
-  if (cardValue <= 7) {
-    const newScore = parseInt(userScore) + cardValue;
-    const scoreElement = document.getElementById("score");
-    if (scoreElement !== null && scoreElement !== undefined) {
-      scoreElement.innerHTML = newScore.toString();
-    }
-  } else if (cardValue > 7) {
-    const newScore = parseInt(userScore) + 0.5;
-    const scoreElement = document.getElementById("score");
-    if (scoreElement !== null && scoreElement !== undefined) {
-      scoreElement.innerHTML = newScore.toString();
+const addingScore = (cardType: number) => {
+  if (cardType <= 7) {
+    userScore = userScore + cardType;
+  } else {
+    userScore = userScore + 0.5;
+  }
+};
+
+// ASK FOR ANOTHER CARD - FUNCTION
+const askAnotherCard = () => {
+  generateRandomCard();
+  showScore();
+  gameOver();
+};
+
+// ASK FOR ANOTHER CARD - BUTTON
+const btnAskCard = document.getElementById("askAnotherCard");
+if (btnAskCard && btnAskCard instanceof HTMLButtonElement) {
+  btnAskCard.addEventListener("click", askAnotherCard);
+}
+
+const disableButton = () => {
+  if (btnAskCard && btnAskCard instanceof HTMLButtonElement) {
+    btnAskCard.disabled = true;
+  }
+  if (btnResign && btnResign instanceof HTMLButtonElement) {
+    btnResign.disabled = true;
+  }
+  if (btnNewGame && btnNewGame instanceof HTMLButtonElement) {
+    btnNewGame.style.display = "block";
+  }
+};
+
+const gameOver = () => {
+  const gameOverElement = document.getElementById("gameOver");
+  if (
+    gameOverElement &&
+    gameOverElement instanceof HTMLParagraphElement &&
+    userScore > maxScore
+  ) {
+    gameOverElement.textContent = "GAME OVER";
+    disableButton();
+  }
+};
+
+const iResign = () => {
+  const resignTextElement = document.getElementById("resignText");
+  if (resignTextElement && resignTextElement instanceof HTMLParagraphElement) {
+    switch (true) {
+      case userScore <= 4:
+        resignTextElement.textContent = "Has sido muy conservador";
+        break;
+      case userScore > 4 && userScore < 6:
+        resignTextElement.textContent = "Te ha entrado el canguelo eh?!";
+        break;
+      case userScore > 5 && userScore < 7.5:
+        resignTextElement.textContent = "...Casi casi...";
+        break;
+      case userScore > 7 && userScore <= 7.5:
+        resignTextElement.textContent = "¡Lo has clavado!¡Enhorabuena!";
+        break;
     }
   }
+  disableButton();
+};
+
+// RESIGN - BUTTON
+const btnResign = document.getElementById("btnResign");
+if (btnResign && btnResign instanceof HTMLButtonElement) {
+  btnResign.addEventListener("click", iResign);
+}
+
+// NEW GAME - FUNCTION
+const newGame = () => {
+  location.reload();
+};
+
+// NEW GAME - BUTTON
+const btnNewGame = document.getElementById("btnNewGame");
+if (btnNewGame && btnNewGame instanceof HTMLButtonElement) {
+  btnNewGame.addEventListener("click", newGame);
 }

@@ -4,36 +4,61 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>Las 7 y media</title>
   </head>
   <body>
-    <div id="scoreContainer">
-      <h1 id="scoreText">Tu puntuación</h1>
-      <h2 id="score"></h2>
-    </div>
-    <div>
-      <p id="gameOver"></p>
-    </div>
-    <div>
-      <p id="resignText"></p>
-    </div>
-    <div id="btnContainer">
-      <button id="askAnotherCard">Carta</button>
-      <button id="btnResign">Me planto</button>
-      <button id="btnNewGame">Nueva partida</button>
-    </div>
+    <div id="titulo">
+      <div>
+        <h1 id="tituloJuego">¡¡Las 7 y media!!</h1>
+      </div>
 
-    <div id="cardContainer">
-      <img
-        src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
-        alt=""
-        id="deckOfCards"
-      />
-      <img
-        src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
-        alt=""
-        id="newCard"
-      />
+      <div id="scoreContainer">
+        <h1 id="scoreText">Tu puntuación:</h1>
+        <h2 id="score"></h2>
+      </div>
+    </div>
+    <div id="mensaje">
+      <p id="status"></p>
+    </div>
+    <div id="tablero">
+      <div id="reglasContainer">
+        <p id="reglasTitle">Reglas del juego</p>
+        <p id="reglas">
+          Para jugar al juego de las siete y media en solitario, sigue estos
+          pasos: 1. Baraja una baraja española de 40 cartas y coloca las cartas
+          boca abajo sobre la mesa. 2. Gira la primera carta y colócala boca
+          arriba en la mesa. Esta carta será la carta del jugador. 3. Decide si
+          deseas tomar otra carta o quedarte con la que tienes. El objetivo del
+          juego es tener una mano que sume 7 y media puntos o lo más cerca
+          posible de este número sin pasarse. 4. Si decides tomar otra carta,
+          gira la siguiente carta boca arriba. Añade el valor de esta carta a tu
+          mano y decide si deseas tomar otra carta o quedarte con lo que tienes.
+          Puedes tomar tantas cartas como desees, pero si la suma de los valores
+          de las cartas de tu mano supera los 7,5 puntos, pierdes
+          automáticamente la partida. 5. Si decides quedarte con la carta que
+          tienes, tu turno termina. Anota tu puntuación y pasa al siguiente
+          turno. 6. Continúa jugando hasta que hayas jugado todas las cartas de
+          la baraja o decidas detenerte. 7. Si logras una mano con una
+          puntuación de 7 y media, has ganado el juego. Si no, tu objetivo es
+          obtener la mano con la puntuación más cercana a 7 y media.
+        </p>
+      </div>
+      <div id="buttonContainer">
+        <p id="btnTitle">¡A jugar!</p>
+        <button id="askAnotherCard">Carta</button>
+        <button id="btnResign">Me planto</button>
+        <button id="btnNewGame">Nueva partida</button>
+        <button id="btnFutureCard">Ver siguiente carta</button>
+      </div>
+      <div id="cardContainer">
+        <div id="img2">
+          <img
+            src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
+            alt=""
+            id="newCard"
+          />
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -1,15 +1,26 @@
 :root {
-  font-family: Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-size: 20px;
-  color: rgb(16, 121, 107);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  padding: 20px;
 }
 
 #scoreContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   justify-content: center;
 }
 
@@ -19,6 +30,149 @@
   padding-left: 50px;
 }
 
+#mensaje {
+  display: flex;
+  flex-direction: row;
+  font-size: 30px;
+  font-weight: bold;
+  height: 80px;
+  color: rgb(64, 65, 109);
+  align-items: center;
+  justify-content: flex-end;
+  background-color: rgb(214, 214, 214);
+  padding-right: 20px;
+}
+
+#titulo {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* background-color: rgb(214, 214, 214); */
+}
+
+#tituloJuego {
+  margin: 0;
+  display: flex;
+  width: 300px;
+  height: 100px;
+  align-items: center;
+  /* background-color: rgb(214, 214, 214); */
+  padding-left: 20px;
+}
+
+#scoreContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100px;
+  justify-content: flex-end;
+  /* background-color: blue; */
+}
+
+#scoreText {
+  /* background-color: bisque; */
+}
+
+#score {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-right: 20px;
+  /* background-color: rgb(172, 133, 85); */
+}
+
+#reglasContainer {
+  /* background-color: aquamarine; */
+  width: 300px;
+}
+
+#reglasTitle {
+  font-size: 16px;
+  width: 280px;
+  color: rgb(110, 110, 110);
+  padding: 10px;
+  padding-left: 20px;
+  text-align: justify;
+  /* background-color: brown; */
+}
+#reglas {
+  color: rgb(110, 110, 110);
+  font-size: 12px;
+  width: 280px;
+  text-align: justify;
+  padding: 10px;
+  padding-left: 20px;
+  /* background-color: rgb(204, 204, 204); */
+}
+
 #btnNewGame {
   display: none;
+}
+
+#btnFutureCard {
+  display: none;
+}
+
+#buttonContainer {
+  display: flex;
+  flex-direction: column;
+  /* background-color: aqua; */
+  width: 600px;
+  align-items: center;
+}
+
+#btnTitle {
+  font-size: 40px;
+  width: 280px;
+  padding: 10px;
+  margin: 0px;
+  text-align: center;
+  /* background-color: brown; */
+}
+button {
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 120px;
+  margin-top: 20px;
+}
+
+button:hover {
+  border-color: #2a2c4b;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#tablero {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(255, 255, 255);
+}
+
+#cardContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  /* background-color: blueviolet; */
+}
+
+#img1 {
+  display: flex;
+  padding: 20px;
+}
+#img2 {
+  display: flex;
+  padding: 20px;
 }

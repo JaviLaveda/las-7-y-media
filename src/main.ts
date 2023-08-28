@@ -25,7 +25,7 @@ enum Cards {
 const randomNumber = () => Math.floor(Math.random() * 10 + 1);
 
 //eliminate 8 & 9
-const eliminate89 = (value: number) => (value <= 7 ? value : value + 2);
+const adjustValue = (value: number) => (value <= 7 ? value : value + 2);
 
 //assing score to card
 const assignScore = (value: number) => (value <= 7 ? value : 0.5);
@@ -36,21 +36,18 @@ const addingScore = (value: number) => (userScore += value);
 // UI INTERFACE FUNCTIONS
 
 // PLAYING GAME*****************************************************************
+
 //showing random card
-const showCard = (cardValue: number) => {
+const getImgCard = (cardValue: number): string => {
+  return cardValue !== 0
+    ? `https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/${cardValue}_${Cards[cardValue]}-copas.jpg`
+    : "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
+};
+
+const showCard = (urlCard: string) => {
   const imgElement = document.getElementById("newCard");
   if (imgElement && imgElement instanceof HTMLImageElement) {
-    if (cardValue !== 0) {
-      imgElement.setAttribute(
-        "src",
-        `https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/${cardValue}_${Cards[cardValue]}-copas.jpg`
-      );
-    } else {
-      imgElement.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg"
-      );
-    }
+    imgElement.src = urlCard;
   } else {
     throw new Error("imgElement not found");
   }
@@ -62,15 +59,16 @@ const showScore = () => {
   if (scoreElement && scoreElement instanceof HTMLHeadingElement) {
     scoreElement.textContent = userScore.toString().padStart(2, "0");
   } else {
-    throw new Error("Score element not found");
+    throw new Error("HeadingElement not found");
   }
 };
 
 //asking for another card
 const askAnotherCard = () => {
   const randomValue = randomNumber();
-  const cardNumber = eliminate89(randomValue);
-  showCard(cardNumber);
+  const cardNumber = adjustValue(randomValue);
+  const imageCard = getImgCard(cardNumber);
+  showCard(imageCard);
   const cardScore = assignScore(cardNumber);
   addingScore(cardScore);
   showScore();
@@ -78,69 +76,82 @@ const askAnotherCard = () => {
 };
 
 // GAME STATUS*********************************************************************
+
 // checking game status
 const checkingStatus = () => {
   if (userScore <= maxScore) {
     keepPlaying();
+  } else if (userScore === 7.5) {
+    winGame();
   } else {
     gameOver();
   }
 };
 
-//game over - FUNCTION
-const gameOver = () => {
-  gameOverMessage();
-  disableButton();
-  activateNewGame();
-};
-
-//game over message
-const gameOverMessage = () => {
-  const gameOverElement = document.getElementById("status");
-  if (gameOverElement && gameOverElement instanceof HTMLParagraphElement) {
-    gameOverElement.textContent = "¡GAME OVER!";
+//status text
+const getStatusMessage = (score: number): string => {
+  if (score <= 4) {
+    return "¡Sigue jugando!";
+  } else if (score === 7.5) {
+    return "¡Lo has clavado!¡Enhorabuena!";
+  } else if (score > 7.5) {
+    return "¡GAME OVER!";
   } else {
-    throw new Error("gameOverElement not found");
+    return "";
   }
 };
-
-//keep playing message
-const keepPlaying = () => {
-  const keepPlayingElement = document.getElementById("status");
-  if (
-    keepPlayingElement &&
-    keepPlayingElement instanceof HTMLParagraphElement
-  ) {
-    keepPlayingElement.textContent = "¡Sigue jugando!";
+// showing status message
+const showMessage = (text: string) => {
+  const statusTextElement = document.getElementById("status");
+  if (statusTextElement && statusTextElement instanceof HTMLParagraphElement) {
+    statusTextElement.textContent = text;
   } else {
     throw new Error("ParagraphElement not found");
   }
 };
 
+//keep playing message
+const keepPlaying = () => {
+  const message = getStatusMessage(userScore);
+  showMessage(message);
+};
+
+//winning - FUNCTION
+const winGame = () => {
+  const message = getStatusMessage(userScore);
+  showMessage(message);
+  disableButton();
+  activateNewGame();
+};
+
+//game over - FUNCTION
+const gameOver = () => {
+  const message = getStatusMessage(userScore);
+  showMessage(message);
+  disableButton();
+  activateNewGame();
+};
+
 // RESIGN*************************************************************************
 
-//resigning text
-const resignMessage = (score: number) => {
-  const resignTextElement = document.getElementById("status");
-  if (resignTextElement && resignTextElement instanceof HTMLParagraphElement) {
-    if (score <= 4) {
-      resignTextElement.textContent = "¡Has sido muy conservador!";
-    } else if (score > 4 && score < 6) {
-      resignTextElement.textContent = "¡Te ha entrado el canguelo eh!";
-    } else if (score > 5 && score < 7.5) {
-      resignTextElement.textContent = "¡Uyyy!¡Casi casi!";
-    } else if ((score = 7.5)) {
-      resignTextElement.textContent = "¡Lo has clavado!¡Enhorabuena!";
-    }
+//resign text
+const getResignMessage = (score: number): string => {
+  if (score <= 4) {
+    return "¡Has sido muy conservador!";
+  } else if (score > 4 && score < 6) {
+    return "¡Te ha entrado el canguelo eh!";
+  } else if (score > 5 && score < 7.5) {
+    return "¡Uyyy!¡Casi casi!";
   } else {
-    throw new Error("resignTextElement not found");
+    return "";
   }
 };
 
 //resigning - FUNCTION
 const resign = () => {
   hiddingStatusText();
-  resignMessage(userScore);
+  const message = getResignMessage(userScore);
+  showMessage(message);
   disableButton();
   activateNewGame();
   activateFutureCardButton();
@@ -163,66 +174,37 @@ const newGame = () => {
   showScore();
   activateButton();
   hiddingStatusText();
-  showCard(0);
+  const imageCard = getImgCard(0);
+  showCard(imageCard);
   disableFutureButton();
 };
 
 // CHECKIN FUTURE STATUS*********************************************************
-// checking future game status
-const checkingFutureStatus = () => {
-  if (userScore > maxScore) {
-    futureGameOverMessage();
-  }
-  if (userScore === 7.5) {
-    futureWinMessage();
-  }
-  if (userScore < 7.5) {
-    futureCloseMessage();
-  }
-};
-//future - game over message
-const futureGameOverMessage = () => {
-  const gameOverElement = document.getElementById("status");
-  if (gameOverElement && gameOverElement instanceof HTMLParagraphElement) {
-    gameOverElement.textContent = "¡Has hecho bien!¡Habrías perdido!";
+
+//future - status message
+const getFutureMessageForScore = (score: number): string => {
+  if (score > maxScore) {
+    return "¡Has hecho bien!¡Habrías perdido!";
+  } else if (score === maxScore) {
+    return "¡Qué pena!¡Habrías ganado!";
+  } else if (score < maxScore) {
+    return "¡Qué pena!¡Estarías más cerca!";
   } else {
-    throw new Error("gameOverElement not found");
-  }
-};
-//future - win message
-const futureWinMessage = () => {
-  const futureWinMessageElement = document.getElementById("status");
-  if (
-    futureWinMessageElement &&
-    futureWinMessageElement instanceof HTMLParagraphElement
-  ) {
-    futureWinMessageElement.textContent = "¡Qué pena!¡Habrías ganado!";
-  } else {
-    throw new Error("HTMLParagraphElement not found");
-  }
-};
-//future - close message
-const futureCloseMessage = () => {
-  const futureCloseMessage = document.getElementById("status");
-  if (
-    futureCloseMessage &&
-    futureCloseMessage instanceof HTMLParagraphElement
-  ) {
-    futureCloseMessage.textContent = "¡Qué pena!¡Estarías más cerca!";
-  } else {
-    throw new Error("HTMLParagraphElement not found");
+    return "";
   }
 };
 
 const futureCard = () => {
   hiddingStatusText();
   const randomValue = randomNumber();
-  const cardNumber = eliminate89(randomValue);
-  showCard(cardNumber);
+  const cardNumber = adjustValue(randomValue);
+  const imageCard = getImgCard(cardNumber);
+  showCard(imageCard);
   const cardScore = assignScore(cardNumber);
   addingScore(cardScore);
   showScore();
-  checkingFutureStatus();
+  const message = getFutureMessageForScore(userScore);
+  showMessage(message);
   disableFutureButton();
 };
 
@@ -273,12 +255,6 @@ const disableButton = () => {
   } else {
     throw new Error("ButtonElement not found");
   }
-  // const btnFutureCard = document.getElementById("btnFutureCard");
-  // if (btnFutureCard && btnFutureCard instanceof HTMLButtonElement) {
-  //   btnFutureCard.disabled = true;
-  // } else {
-  //   throw new Error("ButtonElement not found");
-  // }
 };
 const disableFutureButton = () => {
   const btnFutureCard = document.getElementById("btnFutureCard");

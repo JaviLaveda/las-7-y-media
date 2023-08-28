@@ -79,9 +79,9 @@ const askAnotherCard = () => {
 
 // checking game status
 const checkingStatus = () => {
-  if (userScore <= maxScore) {
+  if (userScore < maxScore) {
     keepPlaying();
-  } else if (userScore === 7.5) {
+  } else if (userScore === maxScore) {
     winGame();
   } else {
     gameOver();
@@ -90,11 +90,11 @@ const checkingStatus = () => {
 
 //status text
 const getStatusMessage = (score: number): string => {
-  if (score <= 4) {
+  if (score < maxScore) {
     return "¡Sigue jugando!";
-  } else if (score === 7.5) {
+  } else if (score === maxScore) {
     return "¡Lo has clavado!¡Enhorabuena!";
-  } else if (score > 7.5) {
+  } else if (score > maxScore) {
     return "¡GAME OVER!";
   } else {
     return "";
@@ -138,7 +138,7 @@ const gameOver = () => {
 const getResignMessage = (score: number): string => {
   if (score <= 4) {
     return "¡Has sido muy conservador!";
-  } else if (score > 4 && score < 6) {
+  } else if (score > 4 && score <= 5) {
     return "¡Te ha entrado el canguelo eh!";
   } else if (score > 5 && score < 7.5) {
     return "¡Uyyy!¡Casi casi!";

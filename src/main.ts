@@ -6,6 +6,10 @@ let userScore: number = 0;
 
 const maxScore: number = 7.5;
 
+//(Tip) - Esto es una entidad, las entidades forman parte de la logica del proyecto (business logic):
+//Para seguir las normas de Clean Architecture se suele poner dentro de su propia carpeta dentro de domain (en domain se aloja logica de tu aplicacion) eg. domain/entities/cards.ts
+//Porque? Imaginate que quisieras hacer otro juego de cartas, la baraja seria algo que se podria reciclar no? 
+//Porque no depende de las funciones que tenga el juego ni de la interfaz
 enum Cards {
   as = 1,
   dos = 2,
@@ -18,18 +22,34 @@ enum Cards {
   caballo = 11,
   rey = 12,
 }
+//(Tip) Repositorio de funciones
+//En este caso hay que pensar que funciones afectan directamente a la interfaz e usuario y que funciones pueden ser abstraidas porque
+//son mas utilitatias y no afectan a la logica del juego
 
 // MOTOR FUNCTIONS
 
+//Esta funcion no afecta a la logica del juego ni depende de ningun valor externo. 
 //generate random number
 const randomNumber = () => Math.floor(Math.random() * 10 + 1);
+
+//(Tip)Esta funcion depende de un valor externo y afecta a la functionalidad del juego (7'5) en especifico, 
+//pero no a la interfaz de usuario, asi que perteneceria a un repositorio destinado al 7'5. 
+//Las funciones de repositorio suelen cumplir la siguiente estructura (el nombre puede variar dependiendo del diseño) data/repositories/siete_medio_repository 
+
+//Un consejo seria ponerte exquisito cn tus constantes incondicionales
+//7 es un numero constante que representa el numero de cartas validas, pero la logica puede cambiar en un futuro
+//Yo apostaria por crear una funcion que devuelva si value es valido o no, porque el valor puede ser mayor que 7 y menor que 10 no? 
+//pero a adjustValue no le deberia importar que valores son validos solo si lo es o no
 
 //eliminate 8 & 9
 const adjustValue = (value: number) => (value <= 7 ? value : value + 2);
 
+
 //assing score to card
 const assignScore = (value: number) => (value <= 7 ? value : 0.5);
 
+
+//(Tip) ahora mismo no te afecta pero adding score no deberia de tener acceso a userScore a no ser que tu se lo proporciones pasandoselo como parametro
 //adding score to userScore
 const addingScore = (value: number) => (userScore += value);
 
@@ -37,8 +57,16 @@ const addingScore = (value: number) => (userScore += value);
 
 // PLAYING GAME*****************************************************************
 
+//UI no deberia de tener acceso a urls, como mucho a una variable que contenga su constante
+//e.g. baseUrl = https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas
+//e.g. enum typeOfcard {copas='copas', espadas='espadas', ... }
+//e.g. const getImgCard(cardValue, typeOfCard)=>cardValue !== 0? 
+//"${baseUrl}/${typeOfCard.value}/${cardValue}_${Cards[cardValue]}-${typeOfCard.value}.jpg" :
+//"${baseUrl}/back.jpg"}
+
 //showing random card
 const getImgCard = (cardValue: number): string => {
+  //
   return cardValue !== 0
     ? `https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/${cardValue}_${Cards[cardValue]}-copas.jpg`
     : "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/back.jpg";
@@ -116,6 +144,11 @@ const keepPlaying = () => {
   showMessage(message);
 };
 
+//(Tip) Cuando escribas funciones lo mejor es pensar como las testearias
+//Imaginate que quisieras testear esta funcion - winGame
+//de donde sacas userScore para comprobar si la funcion hace lo que pides? La forma mas facil seria pasandole el parametro a la funcion
+//La funcion pasaria a ser super sencilla de comprobar si funciona o no
+//de hecho, si piensas en ello, cual es la diferencia enre win y gameOver? solo userScore, si lo pasas desde fuera se te queda lo mismo
 //winning - FUNCTION
 const winGame = () => {
   const message = getStatusMessage(userScore);
